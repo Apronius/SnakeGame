@@ -23,11 +23,11 @@ class Snake():
             piece.next = self.head
             self.head.prev = piece
         else:
-            piece.next = self.head
-            piece.prev = self.head.prev
-            self.head.prev.next = piece
-            self.head.prev = piece
-            self.pieces.append(piece)
+            piece.next = self.tail.next
+            piece.prev = self.tail
+            self.tail.next.prev = piece
+            self.tail.next = piece
+        self.pieces.append(piece)
         self.length += 1
         
     def collision(self) -> bool:
@@ -35,6 +35,9 @@ class Snake():
             if piece.pos == self.pieces[0].pos:
                 return True
         return False
+    
+    def length(self) -> int:
+        return self.length
 
         
 def main():
