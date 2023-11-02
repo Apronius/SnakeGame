@@ -1,4 +1,5 @@
 import pygame
+import random
 
 class Piece():
     def __init__(self, x, y):
@@ -8,9 +9,11 @@ class Piece():
         self.prev = None
         self.next = None
         
-    def pickUp(self, snake):
-        if(snake.head.x == self.x and snake.head.y == self.y):
+    def pickUp(self, snake) -> bool:
+        if((snake.head.x >= self.x or (snake.head.x +50) <= self.x ) and (snake.head.y >= self.y or (snake.head.y + 50) <= self.y)):
             snake.addPiece()
+            return True
+        return False
             
         
 class Snake():
@@ -23,9 +26,11 @@ class Snake():
         self.length = 0
         
     def addPiece(self):
-        piece = Piece()
+        piece = Piece(self.tail.next.x-50, self.tail.next.y-50)
         if self.length == 0:
             piece.next = self.head
+        
+            self.tail.next = piece
             self.head.prev = piece
         else:
             piece.next = self.tail.next
@@ -56,6 +61,8 @@ def main():
     dt = 0
     snake = Snake()
     direction = 0
+    x = random.randint(0, 1280 - 50)
+    y = random.randint(0, 720 - 50)
     
     while running:
         
@@ -68,8 +75,15 @@ def main():
         # fill the screen with a color to wipe away anything from last frame
         screen.fill("white")
 
-        pygame.draw.rect(screen, "red", snake.head.rect)
+        for piece in snake.pieces:
+            pygame.draw.rect(screen, "red", piece.rect)
 
+        piece = Piece(x, y)
+        if(piece.pickUp(snake)):
+            x = random.randint(0, 1280 - 50)
+            y = random.randint(0, 720 - 50)
+        pygame.draw.rect(screen, "green", piece.rect)
+        
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_w]:
