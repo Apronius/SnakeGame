@@ -10,7 +10,8 @@ class Piece():
         self.next = None
         
     def pickUp(self, snake) -> bool:
-        if((snake.head.x >= self.x or (snake.head.x +50) <= self.x ) and (snake.head.y >= self.y or (snake.head.y + 50) <= self.y)):
+        if((snake.head.x >= self.x and (snake.head.x +50) <= self.x ) and (snake.head.y >= self.y and (snake.head.y + 50) <= self.y)):
+            print("IN")
             snake.addPiece()
             return True
         return False
@@ -29,12 +30,10 @@ class Snake():
         piece = Piece(self.tail.next.x-50, self.tail.next.y-50)
         if self.length == 0:
             piece.next = self.head
-        
             self.tail.next = piece
             self.head.prev = piece
         else:
             piece.next = self.tail.next
-            piece.prev = self.tail
             self.tail.next.prev = piece
             self.tail.next = piece
         self.pieces.append(piece)
